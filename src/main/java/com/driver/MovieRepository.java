@@ -29,7 +29,7 @@ public class MovieRepository {
         return "Director added successfully";
     }
     public String addMovieDirectorPair(String movieName,String directorName){
-        if (pairHashMap.containsKey(directorName)){
+        if (pairHashMap.containsKey(directorHashMap.get(directorName))){
             List<Movie> movie = pairHashMap.get(directorHashMap.get(directorName));
             movie.add(movieHashMap.get(movieName));
             pairHashMap.put(directorHashMap.get(directorName),movie);
@@ -53,10 +53,10 @@ public class MovieRepository {
         }
         return movies;
     }
-    public List<Movie> findAllMovies(){
-        List<Movie> movies = new ArrayList<>();
+    public List<String> findAllMovies(){
+        List<String> movies = new ArrayList<>();
         for (String movieName : movieHashMap.keySet()){
-            movies.add(movieHashMap.get(movieName));
+            movies.add(movieName);
         }
         return movies;
     }
