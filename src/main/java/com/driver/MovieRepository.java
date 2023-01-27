@@ -19,7 +19,7 @@ class Pair{
 public class MovieRepository {
     HashMap<String,Movie> movieHashMap = new HashMap<>();
     HashMap<String,Director> directorHashMap = new HashMap<>();
-    HashMap<Director,List<Movie>> pairHashMap = new HashMap<>();
+    HashMap<String,List<String>> pairHashMap = new HashMap<>();
     public String  addMovie(Movie movie){
         movieHashMap.put(movie.getName(),movie);
         return "Movie added successfully";
@@ -29,14 +29,14 @@ public class MovieRepository {
         return "Director added successfully";
     }
     public String addMovieDirectorPair(String movieName,String directorName){
-        if (pairHashMap.containsKey(directorHashMap.get(directorName))){
-            List<Movie> movie = pairHashMap.get(directorHashMap.get(directorName));
-            movie.add(movieHashMap.get(movieName));
-            pairHashMap.put(directorHashMap.get(directorName),movie);
+        if (pairHashMap.containsKey(directorName)){
+            List<String> movie = pairHashMap.get(directorName);
+            movie.add(movieName);
+            pairHashMap.put(directorName,movie);
         }else{
-            List<Movie> list = new ArrayList<>();
-            list.add(movieHashMap.get(movieName));
-            pairHashMap.put(directorHashMap.get(directorName),list);
+            List<String> list = new ArrayList<>();
+            list.add(movieName);
+            pairHashMap.put(directorName,list);
         }
         return "Pair added successfully";
     }
@@ -47,11 +47,7 @@ public class MovieRepository {
         return directorHashMap.get(directorName);
     }
     public List<String> getMoviesByDirectorName(String directorName){
-        List<String> movies = new ArrayList<>();
-        for (Movie movie : pairHashMap.get(directorHashMap.get(directorName))){
-            movies.add(movie.getName());
-        }
-        return movies;
+        return pairHashMap.get(directorName);
     }
     public List<String> findAllMovies(){
         List<String> movies = new ArrayList<>();
@@ -62,23 +58,23 @@ public class MovieRepository {
     }
     public String deleteDirectorByName(String directorName){
         directorHashMap.remove(directorName);
-        if (pairHashMap.containsKey(directorHashMap.get(directorName))){
-            List<Movie> movies = pairHashMap.get(directorHashMap.get(directorName));
-            for (Movie movie : movies){
-                if (movieHashMap.containsKey(movie)){
-                    movieHashMap.remove(movie);
+        if (pairHashMap.containsKey(directorName)){
+            List<String> movieNames = pairHashMap.get(directorName);
+            for (String movieName : movieNames){
+                if (movieHashMap.containsKey(movieName)){
+                    movieHashMap.remove(movieName);
                 }
             }
-            pairHashMap.remove(directorHashMap.get(directorName));
+            pairHashMap.remove(directorName);
         }
         return "Removed successfully";
     }
     public String deleteAllDirectors(){
-        for (Director director : pairHashMap.keySet()) {
-            List<Movie> movies = pairHashMap.get(directorHashMap.get(director));
-            for (Movie movie : movies) {
-                if (movieHashMap.containsKey(movie.getName())) {
-                    movieHashMap.remove(movie.getName());
+        for (String directorName : pairHashMap.keySet()) {
+            List<String> movieNames = pairHashMap.get(directorName);
+            for (String movieName : movieNames) {
+                if (movieHashMap.containsKey(movieName)) {
+                    movieHashMap.remove(movieName);
                 }
             }
         }
